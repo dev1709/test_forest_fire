@@ -2,27 +2,27 @@
 ## This is an end-to-end Machine Learning web application built with Flask. It predicts the occurrence or severity of forest fires based on 9 meteorological and environmental input features using a Ridge Regression model.
 # 📁 Project Structure
 model/   
-PNG
+ 
 ridge.pkl: The trained Ridge Regression model.   
-PNG
+ 
 scaler.pkl: The StandardScaler used to normalize the 9 input features before prediction.   
-PNG
+ 
 notebooks/   
-PNG
+ 
 Algerian_forest_fires_dataset_UPDATE.csv: The raw dataset used for the project.   
-PNG
+ 
 EDA+FE+ModelTraining.ipynb: The Jupyter Notebook detailing the Exploratory Data Analysis, Feature Engineering, and Model Training pipeline.   
-PNG
+ 
 templates/   
-PNG
+ 
 home.html: The landing page of the application.   
-PNG
+ 
 index.html: The prediction form where users can input integer or float values for the 9 features.   
-PNG
+ 
 application.py: The main Flask application script that serves the web app, processes user input, and returns predictions.   
-PNG
+ 
 requirement.txt: Contains the list of Python dependencies (Flask, pandas, numpy, scikit-learn, etc.).   
-PNG
+ 
 ## 🚀 Tech Stack
 Backend: Python, Flask
 Machine Learning: Scikit-learn, Pandas, NumPy
