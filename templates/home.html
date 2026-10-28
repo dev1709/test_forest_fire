@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerical Data Entry Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Remove up/down arrows from number input for a cleaner look */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex items-center justify-center p-4 sm:p-8">
+
+    <div class="bg-white w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden transform transition-all">
+        <!-- Header section -->
+        <div class="bg-indigo-600 px-8 py-6">
+            <h2 class="text-2xl font-bold text-white">Pediction Entry</h2>
+            <p class="text-indigo-200 mt-1 text-sm">Please input the data (integers or decimals)
+                below.</p>
+        </div>
+
+        <!-- Form section -->
+        <form action="{{url_for('predict_datapoints')}}" method="post" id="dataForm" class="p-8">
+            <!-- 3x3 Grid for inputs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+                <!-- Input 1 -->
+                <div>
+                    <label for="Temperature" class="block text-sm font-medium text-gray-700 mb-1">Temperature</label>
+                    <input type="number" step="any" id="Temperature" name="Temperature" required
+                        placeholder="e.g., 42.5"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 2 -->
+                <div>
+                    <label for="RH" class="block text-sm font-medium text-gray-700 mb-1">RH</label>
+                    <input type="number" step="any" id="RH" name="RH" required placeholder="e.g., -5.1"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 3 -->
+                <div>
+                    <label for="Ws" class="block text-sm font-medium text-gray-700 mb-1">Ws</label>
+                    <input type="number" step="any" id="Ws" name="Ws" required placeholder="e.g., 100"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 4 -->
+                <div>
+                    <label for="Rain" class="block text-sm font-medium text-gray-700 mb-1">Rain</label>
+                    <input type="number" step="any" id="Rain" name="Rain" required placeholder="e.g., 0.05"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 5 -->
+                <div>
+                    <label for="FFMC" class="block text-sm font-medium text-gray-700 mb-1">FFMC</label>
+                    <input type="number" step="any" id="FFMC" name="FFMC" required placeholder="e.g., 7.89"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 6 -->
+                <div>
+                    <label for="DMC" class="block text-sm font-medium text-gray-700 mb-1">DMC</label>
+                    <input type="number" step="any" id="DMC" name="DMC" required placeholder="e.g., 34"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 7 -->
+                <div>
+                    <label for="ISI" class="block text-sm font-medium text-gray-700 mb-1">ISI</label>
+                    <input type="number" step="any" id="ISI" name="ISI" required placeholder="e.g., -12.3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 8 -->
+                <div>
+                    <label for="Classes" class="block text-sm font-medium text-gray-700 mb-1">Classes</label>
+                    <input type="number" step="any" id="Classes" name="Classes" required placeholder="e.g., 88.8"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+                <!-- Input 9 -->
+                <div>
+                    <label for="Region" class="block text-sm font-medium text-gray-700 mb-1">Region</label>
+                    <input type="number" step="any" id="Region" name="Region" required placeholder="e.g., 256.01"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                </div>
+
+            </div>
+
+            <!-- Submit Button & Message Container -->
+            <div
+                class="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+                <!-- Success Message Box (Hidden by default) -->
+                <div id="successMessage"
+                    class="hidden flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-2 rounded-lg w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-medium">Form submitted successfully!</span>
+                </div>
+
+                <div class="flex-grow"></div> <!-- Spacer -->
+
+                <button type="submit"
+                    class="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Submit Data
+                </button>
+            </div>
+            <h2> THE FWI PREDICTION IS {{results}} </h2>
+        </form>
+    </div>
+
+
+</body>
+
+</html>
