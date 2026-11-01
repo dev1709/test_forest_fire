@@ -4,6 +4,8 @@ import pandas as pd
 import pickle
 from sklearn.preprocessing import StandardScaler
 
+
+
 application=Flask(__name__)
 app=application
 
@@ -29,10 +31,12 @@ def predict_datapoints():
         Region=float(request.form.get("Region"))
 
         new_data=standard_scaler.transform([[Temperature,RH,Ws,Rain,FFMC,DMC,ISI,Classes,Region]])
-        result=ridge_model.predict(new_data)  
+        result=ridge_model.predict(new_data) 
         return render_template('home.html',results=result[0])      
     else:
         return render_template("home.html")
+
+
 
 
 if __name__=="__main__":

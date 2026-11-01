@@ -4,127 +4,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numerical Data Entry Form</title>
+    <title>Algerian Forest Fire - Prediction Entry</title>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        * {
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Remove up/down arrows from number input for a cleaner look */
+        .forest-heading {
+            font-family: 'Cinzel', serif;
+        }
+
+        body {
+            background: #07140d;
+            min-height: 100vh;
+            position: relative;
+            isolation: isolate;
+        }
+
+        /* Slow forest camera movement */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -3%;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(7, 22, 13, 0.68), rgba(5, 15, 10, 0.82)),
+                url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80') center center / cover no-repeat;
+            transform-origin: center;
+            animation: forestCamera 32s ease-in-out infinite alternate;
+            will-change: transform, filter;
+        }
+
+        /* Subtle shifting sunlight, warm glow and forest mist */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 18% 32%, rgba(74, 222, 128, 0.13), transparent 42%),
+                radial-gradient(ellipse at 82% 68%, rgba(249, 115, 22, 0.10), transparent 38%),
+                linear-gradient(112deg, transparent 28%, rgba(209, 250, 229, 0.045) 48%, transparent 67%);
+            mix-blend-mode: screen;
+            animation: forestLight 21s ease-in-out infinite alternate;
+            will-change: opacity, transform;
+        }
+
+        @keyframes forestCamera {
+            0% {
+                transform: scale(1.02) translate3d(0, 0, 0);
+                filter: brightness(0.92) saturate(0.95);
+            }
+
+            50% {
+                transform: scale(1.07) translate3d(-0.7%, 0.35%, 0);
+                filter: brightness(1.04) saturate(1.08);
+            }
+
+            100% {
+                transform: scale(1.10) translate3d(0.6%, -0.35%, 0);
+                filter: brightness(0.97) saturate(1.02);
+            }
+        }
+
+        @keyframes forestLight {
+            0% {
+                opacity: 0.45;
+                transform: translate3d(-1.5%, 0, 0);
+            }
+
+            50% {
+                opacity: 0.85;
+                transform: translate3d(1%, -0.5%, 0);
+            }
+
+            100% {
+                opacity: 0.55;
+                transform: translate3d(2%, 0.5%, 0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            body::before,
+            body::after {
+                animation: none;
+            }
+        }
+
+        .glass-card {
+            background: rgba(18, 38, 25, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(74, 222, 128, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(34, 197, 94, 0.08);
+            position: relative;
+            z-index: 2;
+        }
+
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
+
+        .custom-input {
+            background: rgba(10, 26, 17, 0.7);
+            border: 1px solid rgba(74, 222, 128, 0.25);
+            color: #f0fdf4;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input:focus {
+            background: rgba(10, 26, 17, 0.95);
+            border-color: #f97316;
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+            color: #ffffff;
+        }
+
+        .custom-input::placeholder {
+            color: #4b5563;
+        }
+
+        .btn-forest {
+            background: linear-gradient(135deg, #166534 0%, #ea580c 100%);
+            box-shadow: 0 4px 20px rgba(234, 88, 12, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .btn-forest:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(234, 88, 12, 0.55);
+            background: linear-gradient(135deg, #15803d 0%, #f97316 100%);
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-indigo-50 to-blue-100 min-h-screen flex items-center justify-center p-4 sm:p-8">
+<body class="text-slate-100 min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-x-hidden">
 
-    <div class="bg-white w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden transform transition-all">
-        <!-- Header section -->
-        <div class="bg-indigo-600 px-8 py-6">
-            <h2 class="text-2xl font-bold text-white">Pediction Entry</h2>
-            <p class="text-indigo-200 mt-1 text-sm">Please input the data (integers or decimals)
-                below.</p>
+
+    <div class="glass-card w-full max-w-4xl rounded-3xl overflow-hidden transform transition-all duration-300 my-8">
+
+        <!-- Header -->
+        <div
+            class="bg-gradient-to-r from-emerald-950 via-green-900 to-amber-950 px-8 py-6 border-b border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-3 mb-1">
+                    <i class="fa-solid fa-tree-city text-emerald-400 text-2xl"></i>
+                    <h2 class="forest-heading text-2xl font-bold tracking-wide text-emerald-100">
+                        METEOROLOGICAL ENTRY
+                    </h2>
+                </div>
+                <p class="text-emerald-200/70 text-xs font-light tracking-wide">Input weather metrics to analyze Fire
+                    Weather Index (FWI) risk</p>
+            </div>
+
         </div>
 
-        <!-- Form section -->
-        <form action="{{url_for('predict_datapoints')}}" method="post" id="dataForm" class="p-8">
-            <!-- 3x3 Grid for inputs -->
+        <!-- Form -->
+        <form action="{{url_for('predict_datapoints')}}" method="post" id="dataForm" class="p-6 sm:p-10">
+
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-                <!-- Input 1 -->
                 <div>
-                    <label for="Temperature" class="block text-sm font-medium text-gray-700 mb-1">Temperature</label>
+                    <label for="Temperature"
+                        class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-temperature-half text-amber-500 mr-1"></i> Temperature (°C)
+                    </label>
                     <input type="number" step="any" id="Temperature" name="Temperature" required
-                        placeholder="e.g., 42.5"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                        placeholder="e.g., 29.0"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 2 -->
                 <div>
-                    <label for="RH" class="block text-sm font-medium text-gray-700 mb-1">RH</label>
-                    <input type="number" step="any" id="RH" name="RH" required placeholder="e.g., -5.1"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="RH" class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-droplet text-teal-400 mr-1"></i> Humidity (%)
+                    </label>
+                    <input type="number" step="any" id="RH" name="RH" required placeholder="e.g., 57.0"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 3 -->
                 <div>
-                    <label for="Ws" class="block text-sm font-medium text-gray-700 mb-1">Ws</label>
-                    <input type="number" step="any" id="Ws" name="Ws" required placeholder="e.g., 100"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="Ws" class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-wind text-emerald-400 mr-1"></i> Wind Speed (km/h)
+                    </label>
+                    <input type="number" step="any" id="Ws" name="Ws" required placeholder="e.g., 18.0"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 4 -->
                 <div>
-                    <label for="Rain" class="block text-sm font-medium text-gray-700 mb-1">Rain</label>
-                    <input type="number" step="any" id="Rain" name="Rain" required placeholder="e.g., 0.05"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="Rain"
+                        class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-cloud-rain text-cyan-400 mr-1"></i> Rain (mm)
+                    </label>
+                    <input type="number" step="any" id="Rain" name="Rain" required placeholder="e.g., 0.0"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 5 -->
                 <div>
-                    <label for="FFMC" class="block text-sm font-medium text-gray-700 mb-1">FFMC</label>
-                    <input type="number" step="any" id="FFMC" name="FFMC" required placeholder="e.g., 7.89"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="FFMC"
+                        class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-gauge text-amber-400 mr-1"></i> FFMC Index
+                    </label>
+                    <input type="number" step="any" id="FFMC" name="FFMC" required placeholder="e.g., 65.7"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 6 -->
                 <div>
-                    <label for="DMC" class="block text-sm font-medium text-gray-700 mb-1">DMC</label>
-                    <input type="number" step="any" id="DMC" name="DMC" required placeholder="e.g., 34"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="DMC" class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-layer-group text-emerald-400 mr-1"></i> DMC Index
+                    </label>
+                    <input type="number" step="any" id="DMC" name="DMC" required placeholder="e.g., 3.4"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 7 -->
                 <div>
-                    <label for="ISI" class="block text-sm font-medium text-gray-700 mb-1">ISI</label>
-                    <input type="number" step="any" id="ISI" name="ISI" required placeholder="e.g., -12.3"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="ISI" class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-fire text-amber-500 mr-1"></i> ISI Index
+                    </label>
+                    <input type="number" step="any" id="ISI" name="ISI" required placeholder="e.g., 1.3"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 8 -->
                 <div>
-                    <label for="Classes" class="block text-sm font-medium text-gray-700 mb-1">Classes</label>
-                    <input type="number" step="any" id="Classes" name="Classes" required placeholder="e.g., 88.8"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="Classes"
+                        class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-tags text-teal-400 mr-1"></i> Classes
+                    </label>
+                    <input type="number" step="any" id="Classes" name="Classes" required placeholder="e.g., 0 or 1"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
-                <!-- Input 9 -->
                 <div>
-                    <label for="Region" class="block text-sm font-medium text-gray-700 mb-1">Region</label>
-                    <input type="number" step="any" id="Region" name="Region" required placeholder="e.g., 256.01"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow text-gray-800">
+                    <label for="Region"
+                        class="block text-xs font-semibold uppercase tracking-wider text-emerald-300 mb-2">
+                        <i class="fa-solid fa-map-location-dot text-emerald-400 mr-1"></i> Region
+                    </label>
+                    <input type="number" step="any" id="Region" name="Region" required placeholder="e.g., 0 or 1"
+                        class="custom-input w-full px-4 py-3 rounded-xl outline-none text-sm font-mono">
                 </div>
 
             </div>
 
-            <!-- Submit Button & Message Container -->
             <div
-                class="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-
-                <!-- Success Message Box (Hidden by default) -->
-                <div id="successMessage"
-                    class="hidden flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-2 rounded-lg w-full sm:w-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <span class="font-medium">Form submitted successfully!</span>
-                </div>
-
-                <div class="flex-grow"></div> <!-- Spacer -->
+                class="mt-8 pt-6 border-t border-emerald-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="/"
+                    class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-house font-normal"></i> Home Overview
+                </a>
 
                 <button type="submit"
-                    class="w-full sm:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Submit Data
+                    class="btn-forest w-full sm:w-auto px-8 py-3.5 text-white font-semibold text-xs tracking-wider uppercase rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-fire-flame-curved"></i> Calculate FWI Risk
                 </button>
             </div>
-            <h2> THE FWI PREDICTION IS {{results}} </h2>
+
+            {% if results %}
+            <div
+                class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-emerald-950/80 to-amber-950/80 border border-amber-500/40 text-center">
+                <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold block mb-1">
+                    Model Evaluation Output
+                </span>
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-100">
+                    FWI Score: <span class="text-amber-400 text-3xl font-extrabold ml-2">{{results}}</span>
+                </h3>
+            </div>
+            {% endif %}
+
         </form>
     </div>
 
